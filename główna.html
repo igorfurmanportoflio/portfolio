@@ -28,6 +28,22 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
+        .overlay-scroll {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 25vh;
+    background: linear-gradient(
+        to bottom,
+        rgba(37, 37, 37, 0),
+        rgba(37, 37, 37, 1)
+    );
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
         /* Hamburger Menu */
         .hamburger {
@@ -113,7 +129,7 @@
             width: 100%;
             height: 120%;
             background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(226,133,224,0.2)), 
-                        url('https://ibb.co/Gxk4bv0') center/cover no-repeat;
+                        url('file:///C:/Users/Igor/Downloads/film-portfolio-background.svg') center/cover no-repeat;
             transform: translateZ(-1px) scale(2);
             z-index: -1;
         }
@@ -131,19 +147,32 @@
 
         .hero-title {
             font-size: 5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(30px);
-        }
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 40px rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease forwards 0.8s;
+}
 
         .hero-subtitle {
             font-size: 1.5rem;
-            opacity: 0;
-            transform: translateY(30px);
-        }
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.6),
+        0 0 10px rgba(255, 255, 255, 0.4),
+        0 0 15px rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease forwards 1s;
+}
 
         /* Portfolio Sections */
         .portfolio-section {
@@ -277,6 +306,20 @@
         .portfolio-item:hover .portfolio-item-content {
             transform: translateY(0);
         }
+        #clouds-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .parallax-wrapper {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
 
         /* Responsive Design */
         @media (max-width: 1400px) {
@@ -380,11 +423,12 @@
     </nav>
 
     <section id="home" class="parallax-wrapper">
-        <div class="parallax-bg"></div>
+        <canvas id="clouds-canvas"></canvas>
         <div class="hero-content">
             <h1 class="hero-title">Film Portfolio</h1>
             <p class="hero-subtitle">Tworzę wyjątkowe historie poprzez obraz</p>
         </div>
+        <div class="overlay-scroll"></div> 
     </section>
 
     <section id="major-projects" class="portfolio-section">
@@ -531,5 +575,170 @@
             });
         });
     </script>
+</body><script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.159.0/build/three.module.js';
+
+    const vertexShader = `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `;
+
+    const fragmentShader = `
+        uniform vec2 uMouse;
+        uniform float uTime;
+        varying vec2 vUv;
+
+        float random(vec2 st) {
+            return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+        }
+
+        float smoothNoise(vec2 st) {
+            vec2 i = floor(st);
+            vec2 f = fract(st);
+            
+            float a = random(i);
+            float b = random(i + vec2(1.0, 0.0));
+            float c = random(i + vec2(0.0, 1.0));
+            float d = random(i + vec2(1.0, 1.0));
+
+            vec2 u = f * f * (3.0 - 2.0 * f);
+            return mix(a, b, u.x) +
+                    (c - a)* u.y * (1.0 - u.x) +
+                    (d - b) * u.x * u.y;
+        }
+
+        float fbm(vec2 x) {
+            float v = 0.0;
+            float a = 0.5;
+            vec2 shift = vec2(100.0);
+            mat2 rot = mat2(cos(0.5), sin(0.5), 
+                            -sin(0.5), cos(0.50));
+            for (int i = 0; i < 6; ++i) {
+                v += a * smoothNoise(x);
+                x = rot * x * 2.0 + shift;
+                a *= 0.5;
+            }
+            return v;
+        }
+
+        void main() {
+            vec2 uv = vUv;
+            vec2 mouse = uMouse * 0.05;
+            uv += mouse;
+            
+            float time = uTime * 0.1;
+            vec2 movement = vec2(time * 0.1, time * 0.05);
+            
+            vec2 q = vec2(0.0);
+            q.x = fbm(uv + movement);
+            q.y = fbm(uv + vec2(1.0));
+
+            vec2 r = vec2(0.0);
+            r.x = fbm(uv + 1.0 * q + vec2(1.7, 9.2) + 0.15 * time);
+            r.y = fbm(uv + 1.0 * q + vec2(8.3, 2.8) + 0.126 * time);
+
+            float f = fbm(uv + r);
+            
+             vec3 cloudColor = vec3(0.14, 0.12, 0.18);      // Ciemny kolor tła
+    vec3 accentColor = vec3(0.88, 0.53, 0.88);     // Różowy kolor (#e285e0)
+    
+    vec3 finalColor = mix(
+        cloudColor, 
+        accentColor, 
+        smoothstep(0.3, 0.8, f)
+    );
+    
+    float opacity = smoothstep(0.3, 0.8, f);
+    gl_FragColor = vec4(finalColor, opacity * 0.8);
+}
+    `;
+
+    class CloudEffect {
+        constructor() {
+            this.scene = new THREE.Scene();
+            this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('clouds-canvas'),
+                alpha: true
+            });
+
+            this.mouse = new THREE.Vector2(0, 0);
+            this.time = 0;
+            this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            this.init();
+            this.animate();
+            this.addEventListeners();
+        }
+
+        async init() {
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            this.material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uMouse: { value: this.mouse },
+                    uTime: { value: 0 }
+                },
+                vertexShader,
+                fragmentShader
+            });
+
+            const mesh = new THREE.Mesh(geometry, this.material);
+            this.scene.add(mesh);
+
+            this.resize();
+        }
+
+        addEventListeners() {
+            window.addEventListener('resize', this.resize.bind(this));
+            
+            if (this.isMobile) {
+                window.addEventListener('touchmove', this.onTouchMove.bind(this));
+                window.addEventListener('touchstart', this.onTouchMove.bind(this));
+            } else {
+                window.addEventListener('mousemove', this.onMouseMove.bind(this));
+            }
+        }
+
+        onMouseMove(event) {
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        onTouchMove(event) {
+            const touch = event.touches[0];
+            this.mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        resize() {
+            const { innerWidth: width, innerHeight: height } = window;
+            this.renderer.setSize(width, height);
+        }
+
+        animate() {
+            requestAnimationFrame(this.animate.bind(this));
+            
+            const timeIncrement = this.isMobile ? 0.005 : 0.01;
+            this.time += timeIncrement;
+            
+            this.material.uniforms.uTime.value = this.time;
+            this.material.uniforms.uMouse.value = this.mouse;
+            
+            this.renderer.render(this.scene, this.camera);
+        }
+    }
+
+    // Initialize CloudEffect only for the hero section
+    new CloudEffect();
+    window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const overlay = document.querySelector('.overlay-scroll');
+    const opacity = Math.min(scrollPosition / window.innerHeight, 1);
+    overlay.style.opacity = opacity;
+});
+</script>
 </body>
 </html>
