@@ -19,44 +19,9 @@
             color: white;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-        }
-
-        .loader {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader-content {
-            text-align: center;
-        }
-
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(226,133,224,0.3);
-            border-top: 3px solid rgba(226,133,224,1);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         #clouds-canvas {
@@ -78,10 +43,10 @@
             z-index: 2;
             width: 90%;
             max-width: 800px;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 0.5s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 0.5s;
         }
 
         @keyframes fadeIn {
@@ -102,100 +67,89 @@
             letter-spacing: 5px;
             color: #e285e0;
             text-shadow: 
-            0 0 5px rgba(226, 133, 224, 0.7),
-            0 0 10px rgba(2226, 133, 224, 0.6),
-            0 0 15px rgba(226, 133, 224, 0.8);
-            
+                0 0 5px rgba(255, 139, 253, 0.9),
+                0 0 10px rgba(255, 139, 253, 0.8),
+                2px 2px 2px rgba(0, 0, 0, 0.5);
             transform: translateZ(20px);
+            opacity: 0;
+            filter: blur(10px);
+            animation: fadeInBlur 1s ease forwards 0.5s;
         }
 
-        @keyframes glow {
-            0%, 100% {
-                text-shadow: 
-                    0 0 10px rgb(226,133,224,0.5),
-                    0 0 20px rgb(226,133,224,0.5),
-                    0 0 30px rgb(226,133,224,0.5),
-                    0 0 40px rgb(226,133,224,0.5),
-                    0 0 50px rgb(226,133,224,0.5);
+        @keyframes fadeInBlur {
+            0% {
+                opacity: 0;
+                filter: blur(10px);
+                transform: translate3d(0, -20px, 0);
             }
-            50% {
-                text-shadow: 
-                    0 0 20px rgba(226,133,224,0.6),
-                    0 0 30px rgba(226,133,224,0.5),
-                    0 0 40px rgba(226,133,224,0.4),
-                    0 0 50px rgba(226,133,224,0.3),
-                    0 0 60px rgba(226,133,224,0.2);
+            100% {
+                opacity: 1;
+                filter: blur(0);
+                transform: translate3d(0, 0, 0);
             }
         }
 
         .subtitle {
             font-size: 1.5rem;
             margin-top: 1rem;
-            color:#e285e0;
-            opacity: 0;
+            color: #e285e0;
             text-shadow: 
-            0 0 5px rgba(226, 133, 224, 0.7),
-            0 0 10px rgba(2226, 133, 224, 0.6),
-            0 0 15px rgba(226, 133, 224, 0.8);
-            transform: translateY(20px);
-            animation: slideUp 0.8s ease forwards 1s;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+                0 0 5px rgba(226, 133, 224, 0.7),
+                0 0 10px rgba(226, 133, 224, 0.6),
+                0 0 15px rgba(226, 133, 224, 0.8);
+            opacity: 0;
+            filter: blur(10px);
+            animation: fadeInBlur 1s ease forwards 1s;
         }
 
         .cta-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2rem;
-            padding: 12px 24px;
-            min-width: 160px;
-            min-height: 44px;
-            background-color: rgba(226,133,224,0.2);
-            color: #ffffff;
-            text-decoration: none;
-            border: 2px solid rgba(226,133,224,0.5);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.8s ease forwards 1.2s;
-            position: relative;
-            overflow: hidden;
-        }
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 12px 24px;
+    min-width: 160px;
+    min-height: 44px;
+    background-color: rgba(226,133,224,0.1);
+    color: #ffffff;
+    text-decoration: none;
+    border: 2px solid rgba(226,133,224,0.5);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    filter: blur(10px);
+    animation: fadeInBlur 1s ease forwards 1.5s;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(226,133,224,0.2);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: rgba(226,133,224,0.2);
-            transition: transform 0.5s ease;
-            transform: translate(-50%, -50%) rotate(45deg) scale(0);
-            z-index: -1;
-        }
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(226,133,224,0.2);
+    transition: transform 0.5s ease;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    z-index: -1;
+}
 
-        .cta-button:hover {
-            background-color: rgba(226,133,224,0.1);
-            border-color: rgba(226,133,224,1);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(226,133,224,0.3);
-        }
-
-        .cta-button:hover::before {
-            transform: translate(-50%, -50%) rotate(45deg) scale(1);
-        }
+.cta-button:hover {
+    background-color: rgba(226,133,224,0.1);
+    border-color: rgba(226,133,224,1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(226,133,224,0.3);
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    letter-spacing: 1.5px;
+}
 
         @media (max-width: 768px) {
             .title {
@@ -244,20 +198,91 @@
                 margin-top: 1rem;
             }
         }
-    </style><body>
-    <div class="loader">
-        <div class="loader-content">
-            <div class="loader-spinner"></div>
-                </div>
+    </style>
+    <style>
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .theme-button {
+            background: rgba(226,133,224,0.1);
+            border: 2px solid rgba(226,133,224,0.5);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e285e0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .theme-button:hover {
+            background: rgba(226,133,224,0.2);
+            border-color: rgba(226,133,224,1);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(226,133,224,0.3);
+        }
+        
+        .theme-button .sun-icon,
+        .theme-button .moon-icon {
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-button .sun-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .theme-button .moon-icon {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        
+        .dark-mode .theme-button .sun-icon {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        
+        .dark-mode .theme-button .moon-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        </style>
+</head>
+<body>
+    <div class="theme-toggle">
+        <button id="themeToggle" class="theme-button" aria-label="Zmień motyw">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
     </div>
-
+   
     <canvas id="clouds-canvas"></canvas>
     <div class="content">
         <h1 class="title">Film Portfolio</h1>
         <p class="subtitle">Tworzę wyjątkowe historie poprzez obraz</p>
         <a href="https://igorfurmanportoflio.github.io/portfolio/główna.html" class="cta-button">Zobacz Projekty</a>
     </div>
-
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.159.0/build/three.module.js';
 
@@ -270,85 +295,105 @@
         `;
 
         const fragmentShader = `
-            uniform vec2 uMouse;
-            uniform float uTime;
-            varying vec2 vUv;
+    uniform vec2 uMouse;
+    uniform float uTime;
+    uniform float uAspect;
+    varying vec2 vUv;
 
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-            }
+    float random(vec2 st) {
+        return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+    }
 
-            float smoothNoise(vec2 st) {
-                vec2 i = floor(st);
-                vec2 f = fract(st);
-                
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
+    float smoothNoise(vec2 st) {
+        vec2 i = floor(st);
+        vec2 f = fract(st);
+        
+        float a = random(i);
+        float b = random(i + vec2(1.0, 0.0));
+        float c = random(i + vec2(0.0, 1.0));
+        float d = random(i + vec2(1.0, 1.0));
 
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) +
-                        (c - a)* u.y * (1.0 - u.x) +
-                        (d - b) * u.x * u.y;
-            }
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(a, b, u.x) +
+                (c - a)* u.y * (1.0 - u.x) +
+                (d - b) * u.x * u.y;
+    }
 
-            float fbm(vec2 x) {
-                float v = 0.0;
-                float a = 0.5;
-                vec2 shift = vec2(100.0);
-                mat2 rot = mat2(cos(0.5), sin(0.5), 
-                                -sin(0.5), cos(0.50));
-                for (int i = 0; i < 6; ++i) {
-                    v += a * smoothNoise(x);
-                    x = rot * x * 2.0 + shift;
-                    a *= 0.5;
-                }
-                return v;
-            }
+    float fbm(vec2 x) {
+        float v = 0.0;
+        float a = 0.5;
+        vec2 shift = vec2(100.0);
+        mat2 rot = mat2(cos(0.5), sin(0.5), 
+                        -sin(0.5), cos(0.50));
+        for (int i = 0; i < 6; ++i) {
+            v += a * smoothNoise(x);
+            x = rot * x * 2.0 + shift;
+            a *= 0.5;
+        }
+        return v;
+    }
 
-            void main() {
-    vec2 uv = vUv;
-    
-    // Interakcja z myszką/dotykiem
-    vec2 mouse = uMouse * 0.08;
-    uv += mouse;
-    
-    // Płynny ruch chmur
-    float time = uTime * 0.1;
-    vec2 movement = vec2(time * 0.12, time * 0.05);
-    
-    vec2 q = vec2(0.0);
-    q.x = fbm(uv + movement);
-    q.y = fbm(uv + vec2(1.0));
+    void main() {
+        vec2 uv = vUv;
+        
+        // Dostosowanie UV dla urządzeń mobilnych
+        if (uAspect < 1.0) {
+            // Obrót UV o 90 stopni
+            uv = vec2(uv.y, 1.0 - uv.x);
+            
+            // Skalowanie
+            float scale = 1.5;
+            uv = (uv - 0.5) * scale + 0.5;
+        }
+        
+        // Dostosowanie szerokości UV względem aspect ratio
+        uv.x *= uAspect;
+        
+        // Interakcja z myszką/dotykiem
+        vec2 mouse = uMouse * 0.08;
+        if (uAspect < 1.0) {
+            mouse = mouse.yx; // Zamiana współrzędnych dla urządzeń mobilnych
+        }
+        uv += mouse;
+        
+        // Dostosowanie prędkości i kierunku ruchu
+        float time = uTime * 0.1;
+        vec2 movement;
+        if (uAspect < 1.0) {
+            // Ruch poziomy dla urządzeń mobilnych
+            movement = vec2(time * 0.12, 0.0);
+        } else {
+            movement = vec2(time * 0.12, time * 0.05);
+        }
+        
+        vec2 q = vec2(0.0);
+        q.x = fbm(uv + movement);
+        q.y = fbm(uv + vec2(1.0));
 
-    vec2 r = vec2(0.0);
-    r.x = fbm(uv + 1.0 * q + vec2(1.7, 9.2) + 0.15 * time);
-    r.y = fbm(uv + 1.0 * q + vec2(8.3, 2.8) + 0.126 * time);
+        vec2 r = vec2(0.0);
+        r.x = fbm(uv + 1.0 * q + vec2(1.7, 9.2) + 0.15 * time);
+        r.y = fbm(uv + 1.0 * q + vec2(8.3, 2.8) + 0.126 * time);
 
-    float f = fbm(uv + r);
-    
-    // Kolory przypominające prawdziwe niebo
-    vec3 skyBlue = vec3(0.4, 0.6, 1.0); // Jasny błękit nieba
-    vec3 cloudColor = vec3(1.0);         // Czysta biel dla chmur
-    vec3 bgColor = skyBlue;
-    
-    // Mieszanie kolorów dla realistycznego efektu
-    vec3 finalColor = mix(
-        cloudColor, 
-        bgColor, 
-        smoothstep(0.4, 0.8, f)
-    );
-    
-    // Dodatkowy efekt świecenia dla chmur
-    float glow = smoothstep(0.4, 0.8, f);
-    finalColor += cloudColor * glow * 0.2;
-    
-    float opacity = smoothstep(0.3, 0.7, f);
-    
-    gl_FragColor = vec4(finalColor, opacity * 0.9);
-}
-        `;
+        float f = fbm(uv + r);
+        
+        vec3 skyBlue = vec3(0.4, 0.6, 1.0);
+        vec3 cloudColor = vec3(1.0);
+        vec3 bgColor = skyBlue;
+        
+        vec3 finalColor = mix(
+            cloudColor, 
+            bgColor, 
+            smoothstep(0.4, 0.8, f)
+        );
+        
+        float glow = smoothstep(0.4, 0.8, f);
+        finalColor += cloudColor * glow * 0.2;
+        
+        float opacity = smoothstep(0.3, 0.7, f);
+        
+        gl_FragColor = vec4(finalColor, opacity * 0.9);
+    }
+`;
 
         class CloudEffect {
             constructor() {
@@ -356,15 +401,19 @@
                 this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: document.getElementById('clouds-canvas'),
-                    antialias: true
+                    antialias: true,
+                    powerPreference: "high-performance"
                 });
 
                 this.mouse = new THREE.Vector2(0, 0);
                 this.time = 0;
+                this.aspect = window.innerWidth / window.innerHeight;
                 this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
                 if (this.isMobile) {
-                    this.renderer.setPixelRatio(1);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                } else {
+                    this.renderer.setPixelRatio(window.devicePixelRatio);
                 }
 
                 this.init();
@@ -377,7 +426,8 @@
                 this.material = new THREE.ShaderMaterial({
                     uniforms: {
                         uMouse: { value: this.mouse },
-                        uTime: { value: 0 }
+                        uTime: { value: 0 },
+                        uAspect: { value: this.aspect }
                     },
                     vertexShader,
                     fragmentShader
@@ -390,13 +440,13 @@
             }
 
             addEventListeners() {
-                window.addEventListener('resize', this.resize.bind(this));
+                window.addEventListener('resize', this.resize.bind(this), { passive: true });
                 
                 if (this.isMobile) {
-                    window.addEventListener('touchmove', this.onTouchMove.bind(this));
-                    window.addEventListener('touchstart', this.onTouchMove.bind(this));
+                    window.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: true });
+                    window.addEventListener('touchstart', this.onTouchMove.bind(this), { passive: true });
                 } else {
-                    window.addEventListener('mousemove', this.onMouseMove.bind(this));
+                    window.addEventListener('mousemove', this.onMouseMove.bind(this), { passive: true });
                 }
             }
 
@@ -414,12 +464,17 @@
             resize() {
                 const { innerWidth: width, innerHeight: height } = window;
                 this.renderer.setSize(width, height);
+                this.aspect = width / height;
+                if (this.material) {
+                    this.material.uniforms.uAspect.value = this.aspect;
+                }
             }
 
             animate() {
                 requestAnimationFrame(this.animate.bind(this));
                 
-                const timeIncrement = this.isMobile ? 0.005 : 0.01;
+                // Wolniejsza animacja na urządzeniach mobilnych
+                const timeIncrement = this.isMobile ? 0.003 : 0.01;
                 this.time += timeIncrement;
                 
                 this.material.uniforms.uTime.value = this.time;
@@ -432,11 +487,31 @@
         // Initialize CloudEffect and handle loader
         window.addEventListener('load', () => {
             new CloudEffect();
-            setTimeout(() => {
-                document.querySelector('.loader').classList.add('hidden');
-            }, 1500);
+            
         });
     </script>
+    <script>
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            // Zapisz aktualny stan przewijania
+            const scrollPosition = window.scrollY;
+            
+            // Przełącz tryb
+            if (document.body.classList.contains('dark-mode')) {
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = 'noc.html';
+            }
+            
+            // Po załadowaniu nowej strony przywróć pozycję przewijania
+            window.addEventListener('load', function() {
+                window.scrollTo(0, scrollPosition);
+            });
+        });
+        
+        // Sprawdź aktualny tryb przy ładowaniu strony
+        if (window.location.href.includes('noc.html')) {
+            document.body.classList.add('dark-mode');
+        }
+        </script>
 </body>
 </html>
-</head>
